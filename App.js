@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
-import { useState, useEffect } from "react";
-import Dashboard from "./components/Dashboard";
-import JSBasics from "./exercises/JSBasics/JSBasics";
-import ReactBasics from "./exercises/ReactBasics/ReactBasics";
-import Exercise from "./exerciseEnum";
-import { color } from "./commonStyles";
-import Kata from "./exercises/Kata/Kata";
+import { StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect } from 'react';
+import Dashboard from './components/Dashboard';
+import JSBasics from './exercises/JSBasics/JSBasics';
+import ReactBasics from './exercises/ReactBasics/ReactBasics';
+import Exercise from './exerciseEnum';
+import { color } from './commonStyles';
+import Kata from './exercises/Kata/Kata';
 
 export default function App() {
   const [exerciseShown, setExerciseShown] = useState();
@@ -21,7 +21,7 @@ export default function App() {
       {(() => {
         switch (exerciseShown) {
           case Exercise.Jsbasic:
-            return <JSBasics></JSBasics>;
+            return <JSBasics onBack={goToExercise}></JSBasics>;
           case Exercise.ReactBasics:
             return <ReactBasics></ReactBasics>;
           case Exercise.Kata:
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.black,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
