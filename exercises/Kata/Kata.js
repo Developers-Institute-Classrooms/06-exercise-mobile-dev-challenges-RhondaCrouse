@@ -1,12 +1,12 @@
-import { Text, View, StyleSheet, Picker } from "react-native";
-import React, { useState } from "react";
-import { commonStyle, fontSize, color } from "../../commonStyles";
+import { Text, View, StyleSheet, Picker } from 'react-native';
+import React, { useState } from 'react';
+import { commonStyle, fontSize, color } from '../../commonStyles';
 
 const ChessPiece = {
-  Knight: "Knight",
-  Queen: "Queen",
-  Rook: "Rook",
-  Bishop: "Bishop",
+  Knight: 'Knight',
+  Queen: 'Queen',
+  Rook: 'Rook',
+  Bishop: 'Bishop',
 };
 
 export default function Kata() {
@@ -21,32 +21,101 @@ export default function Kata() {
 
   const updatePiece = (newPiece, newX, newY) => {
     console.log(newPiece, newX, newY);
-    console.log("King", kingPos.x, kingPos.y);
+    console.log('King', kingPos.x, kingPos.y);
     // TODO: Add logic in here to determine if King is in check
+
+    const knightPos = [
+      [kingPos.x + 2, kingPos.y + 1],
+      [kingPos.x + 1, kingPos.y + 2],
+    ];
+
+    const bishopPos = [
+      [kingPos.x + 1, kingPos.y + 1],
+      [kingPos.x + 2, kingPos.y + 2],
+      [kingPos.x + 3, kingPos.y + 3],
+      [kingPos.x + 4, kingPos.y + 4],
+      [kingPos.x + 5, kingPos.y + 5],
+      [kingPos.x + 6, kingPos.y + 6],
+      [kingPos.x + 7, kingPos.y + 7],
+    ];
+
+    const rookPos = [
+      [kingPos.x + 1, kingPos.y + 0],
+      [kingPos.x + 2, kingPos.y + 0],
+      [kingPos.x + 3, kingPos.y + 0],
+      [kingPos.x + 4, kingPos.y + 0],
+      [kingPos.x + 5, kingPos.y + 0],
+      [kingPos.x + 6, kingPos.y + 0],
+      [kingPos.x + 7, kingPos.y + 0],
+      [kingPos.x + 0, kingPos.y + 1],
+      [kingPos.x + 0, kingPos.y + 2],
+      [kingPos.x + 0, kingPos.y + 3],
+      [kingPos.x + 0, kingPos.y + 4],
+      [kingPos.x + 0, kingPos.y + 5],
+      [kingPos.x + 0, kingPos.y + 6],
+      [kingPos.x + 0, kingPos.y + 7],
+    ];
+
+    const queenPos = [
+      [kingPos.x + 1, kingPos.y + 1],
+      [kingPos.x + 2, kingPos.y + 2],
+      [kingPos.x + 3, kingPos.y + 3],
+      [kingPos.x + 4, kingPos.y + 4],
+      [kingPos.x + 5, kingPos.y + 5],
+      [kingPos.x + 6, kingPos.y + 6],
+      [kingPos.x + 7, kingPos.y + 7],
+      [kingPos.x + 1, kingPos.y + 1],
+      [kingPos.x + 2, kingPos.y + 2],
+      [kingPos.x + 3, kingPos.y + 3],
+      [kingPos.x + 4, kingPos.y + 4],
+      [kingPos.x + 5, kingPos.y + 5],
+      [kingPos.x + 6, kingPos.y + 6],
+      [kingPos.x + 7, kingPos.y + 7],
+      [kingPos.x + 1, kingPos.y + 0],
+      [kingPos.x + 2, kingPos.y + 0],
+      [kingPos.x + 3, kingPos.y + 0],
+      [kingPos.x + 4, kingPos.y + 0],
+      [kingPos.x + 5, kingPos.y + 0],
+      [kingPos.x + 6, kingPos.y + 0],
+      [kingPos.x + 7, kingPos.y + 0],
+      [kingPos.x + 0, kingPos.y + 1],
+      [kingPos.x + 0, kingPos.y + 2],
+      [kingPos.x + 0, kingPos.y + 3],
+      [kingPos.x + 0, kingPos.y + 4],
+      [kingPos.x + 0, kingPos.y + 5],
+      [kingPos.x + 0, kingPos.y + 6],
+      [kingPos.x + 0, kingPos.y + 7],
+    ];
+    if (newPiece === 'Queen' || newPiece === 'Rook') {
+      if (kingPos.x === newX || kingPos.y === newY) {
+        setInCheck(true);
+      } else setInCheck(false);
+    }
+
     // setInCheck(true);
   };
 
   const king = () => (
     <Text
-      style={{ fontSize: "2rem", textAlign: "center", lineHeight: "1.5rem" }}
+      style={{ fontSize: '2rem', textAlign: 'center', lineHeight: '1.5rem' }}
     >
       ♚
     </Text>
   );
   const constructPiece = () => (
     <Text
-      style={{ fontSize: "2rem", textAlign: "center", lineHeight: "1.5rem" }}
+      style={{ fontSize: '2rem', textAlign: 'center', lineHeight: '1.5rem' }}
     >
       {(() => {
         switch (piece) {
           case ChessPiece.Bishop:
-            return "♗";
+            return '♗';
           case ChessPiece.Rook:
-            return "♖";
+            return '♖';
           case ChessPiece.Knight:
-            return "♘";
+            return '♘';
           case ChessPiece.Queen:
-            return "♕";
+            return '♕';
         }
       })()}
     </Text>
@@ -84,12 +153,12 @@ export default function Kata() {
   const chessBoard = () => (
     <View
       style={{
-        backgroundColor: "white",
-        display: "grid",
-        width: "18rem",
-        height: "18rem",
-        gridTemplateRows: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
-        gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+        backgroundColor: 'white',
+        display: 'grid',
+        width: '18rem',
+        height: '18rem',
+        gridTemplateRows: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr',
       }}
     >
       {(() => {
@@ -179,6 +248,6 @@ export default function Kata() {
 
 const styles = StyleSheet.create({
   darkCell: {
-    backgroundColor: "gray",
+    backgroundColor: 'gray',
   },
 });
