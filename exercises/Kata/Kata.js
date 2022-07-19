@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Picker } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { commonStyle, fontSize, color } from '../../commonStyles';
 
 const ChessPiece = {
@@ -23,13 +23,18 @@ export default function Kata() {
     console.log(newPiece, newX, newY);
     console.log('King', kingPos.x, kingPos.y);
     // TODO: Add logic in here to determine if King is in check
-
-    const knightPos = [
+    const knightPositions = [
       [kingPos.x + 2, kingPos.y + 1],
+      [kingPos.x + 2, kingPos.y - 1],
+      [kingPos.x - 2, kingPos.y + 1],
+      [kingPos.x - 2, kingPos.y - 1],
       [kingPos.x + 1, kingPos.y + 2],
+      [kingPos.x + 1, kingPos.y - 2],
+      [kingPos.x - 1, kingPos.y + 2],
+      [kingPos.x - 1, kingPos.y - 2],
     ];
 
-    const bishopPos = [
+    const bishopPositions = [
       [kingPos.x + 1, kingPos.y + 1],
       [kingPos.x + 2, kingPos.y + 2],
       [kingPos.x + 3, kingPos.y + 3],
@@ -37,62 +42,68 @@ export default function Kata() {
       [kingPos.x + 5, kingPos.y + 5],
       [kingPos.x + 6, kingPos.y + 6],
       [kingPos.x + 7, kingPos.y + 7],
+      [kingPos.x - 1, kingPos.y - 1],
+      [kingPos.x - 2, kingPos.y - 2],
+      [kingPos.x - 3, kingPos.y - 3],
+      [kingPos.x - 4, kingPos.y - 4],
+      [kingPos.x - 5, kingPos.y - 5],
+      [kingPos.x - 6, kingPos.y - 6],
+      [kingPos.x - 7, kingPos.y - 7],
+      [kingPos.x + 1, kingPos.y - 1],
+      [kingPos.x + 2, kingPos.y - 2],
+      [kingPos.x + 3, kingPos.y - 3],
+      [kingPos.x + 4, kingPos.y - 4],
+      [kingPos.x + 5, kingPos.y - 5],
+      [kingPos.x + 6, kingPos.y - 6],
+      [kingPos.x + 7, kingPos.y - 7],
+      [kingPos.x - 1, kingPos.y + 1],
+      [kingPos.x - 2, kingPos.y + 2],
+      [kingPos.x - 3, kingPos.y + 3],
+      [kingPos.x - 4, kingPos.y + 4],
+      [kingPos.x - 5, kingPos.y + 5],
+      [kingPos.x - 6, kingPos.y + 6],
+      [kingPos.x - 7, kingPos.y + 7],
     ];
-
-    const rookPos = [
-      [kingPos.x + 1, kingPos.y + 0],
-      [kingPos.x + 2, kingPos.y + 0],
-      [kingPos.x + 3, kingPos.y + 0],
-      [kingPos.x + 4, kingPos.y + 0],
-      [kingPos.x + 5, kingPos.y + 0],
-      [kingPos.x + 6, kingPos.y + 0],
-      [kingPos.x + 7, kingPos.y + 0],
-      [kingPos.x + 0, kingPos.y + 1],
-      [kingPos.x + 0, kingPos.y + 2],
-      [kingPos.x + 0, kingPos.y + 3],
-      [kingPos.x + 0, kingPos.y + 4],
-      [kingPos.x + 0, kingPos.y + 5],
-      [kingPos.x + 0, kingPos.y + 6],
-      [kingPos.x + 0, kingPos.y + 7],
-    ];
-
-    const queenPos = [
-      [kingPos.x + 1, kingPos.y + 1],
-      [kingPos.x + 2, kingPos.y + 2],
-      [kingPos.x + 3, kingPos.y + 3],
-      [kingPos.x + 4, kingPos.y + 4],
-      [kingPos.x + 5, kingPos.y + 5],
-      [kingPos.x + 6, kingPos.y + 6],
-      [kingPos.x + 7, kingPos.y + 7],
-      [kingPos.x + 1, kingPos.y + 1],
-      [kingPos.x + 2, kingPos.y + 2],
-      [kingPos.x + 3, kingPos.y + 3],
-      [kingPos.x + 4, kingPos.y + 4],
-      [kingPos.x + 5, kingPos.y + 5],
-      [kingPos.x + 6, kingPos.y + 6],
-      [kingPos.x + 7, kingPos.y + 7],
-      [kingPos.x + 1, kingPos.y + 0],
-      [kingPos.x + 2, kingPos.y + 0],
-      [kingPos.x + 3, kingPos.y + 0],
-      [kingPos.x + 4, kingPos.y + 0],
-      [kingPos.x + 5, kingPos.y + 0],
-      [kingPos.x + 6, kingPos.y + 0],
-      [kingPos.x + 7, kingPos.y + 0],
-      [kingPos.x + 0, kingPos.y + 1],
-      [kingPos.x + 0, kingPos.y + 2],
-      [kingPos.x + 0, kingPos.y + 3],
-      [kingPos.x + 0, kingPos.y + 4],
-      [kingPos.x + 0, kingPos.y + 5],
-      [kingPos.x + 0, kingPos.y + 6],
-      [kingPos.x + 0, kingPos.y + 7],
-    ];
-    if (newPiece === 'Queen' || newPiece === 'Rook') {
+    if (newPiece === 'Queen') {
+      const pieceCoordinates = [newX, newY];
+      if (kingPos.x === newX || kingPos.y === newY) {
+        setInCheck(true);
+      } else if (
+        JSON.stringify(bishopPositions).includes(
+          JSON.stringify(pieceCoordinates)
+        )
+      ) {
+        setInCheck(true);
+      } else setInCheck(false);
+    }
+    if (newPiece === 'Rook') {
       if (kingPos.x === newX || kingPos.y === newY) {
         setInCheck(true);
       } else setInCheck(false);
     }
 
-    // setInCheck(true);
+    if (newPiece === 'Knight') {
+      const pieceCoordinates = [newX, newY];
+      console.log(JSON.stringify(pieceCoordinates));
+      if (
+        JSON.stringify(knightPositions).includes(
+          JSON.stringify(pieceCoordinates)
+        )
+      ) {
+        setInCheck(true);
+      } else setInCheck(false);
+    }
+    if (newPiece === 'Bishop') {
+      const pieceCoordinates = [newX, newY];
+      console.log(JSON.stringify(pieceCoordinates));
+      if (
+        JSON.stringify(bishopPositions).includes(
+          JSON.stringify(pieceCoordinates)
+        )
+      ) {
+        setInCheck(true);
+      } else setInCheck(false);
+    }
   };
 
   const king = () => (
