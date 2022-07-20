@@ -5,35 +5,44 @@ import {
   Button,
   TextInput,
   FlatList,
-} from "react-native";
-import { useState, useEffect } from "react";
-import { commonStyle, fontSize, color } from "../../commonStyles";
+} from 'react-native';
+import { useState, useEffect } from 'react';
+import { commonStyle, fontSize, color } from '../../commonStyles';
+import { getData, storeData } from './storageApi';
 
 export default function LocalStorage() {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [userList, setUserList] = useState([{ name: "test", age: "123" }]);
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [userList, setUserList] = useState([{ name: 'test', age: '123' }]);
 
-  // TODO: Populate userList with the data stored in local storage whenever this component loads.
-  // You can also remove the test data { name: "test", age: "123" } once this is done.
+  useEffect(() => {
+    (async () => {
+      const userList = await getData();
+      setUserList(userList || []);
+    })();
+  }, []);
 
   const handleAddUser = () => {
-    const dataToAdd = { name, age };
-    // TODO: Add data to the local storage.
+    const newUser = { name, age };
+    setUserList([...userList, newUser]);
+    storeData([...userList, newUser]);
   };
 
   const handleClearUser = () => {
-    // TODO: Clear data from local storage.
+    setUserList([]);
+    storeData([]);
   };
-
   const deleteData = (index) => {
-    // TODO: Delete the user data with the correct index
+    const newUserList = [...userList];
+    newUserList.splice(index, 1);
+    setUserList(newUserList);
+    storeData(newUserList);
   };
 
   const listItem = (listData, i) => (
     <View style={styles.userListItem}>
       <Text style={commonStyle.text}>
-        Index: {listData.index}, Name: {listData.item.name}, Age:{" "}
+        Index: {listData.index}, Name: {listData.item.name}, Age:{' '}
         {listData.item.age}
       </Text>
       <Button title="🗑" onPress={() => deleteData(listData.index)} />
@@ -46,7 +55,7 @@ export default function LocalStorage() {
       <FlatList
         data={userList}
         renderItem={listItem}
-        keyExtractor={(item, index) => "key" + index}
+        keyExtractor={(item, index) => 'key' + index}
       />
 
       <View>
@@ -75,15 +84,15 @@ export default function LocalStorage() {
 const styles = StyleSheet.create({
   inputField: {
     fontSize: fontSize.small,
-    height: "2rem",
-    padding: "0.4rem",
-    borderRadius: "0.2rem",
-    width: "100%",
+    height: '2rem',
+    padding: '0.4rem',
+    borderRadius: '0.2rem',
+    width: '100%',
     color: color.black,
     backgroundColor: color.white,
   },
   userListItem: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
