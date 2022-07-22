@@ -10,7 +10,7 @@ export default function Kata({ createUser }) {
 
   const checkPasswordStrength = () => {
     const regex = /(?=.{8,}$)(?=(?:.*?[A-Z]){2})(?=.*?[a-z])(?=.*[0-9])/;
-    if (username & password) {
+    if (username && password) {
       if (regex.test(password)) {
         setPasswordValid(true);
         createUser({ username, password });
